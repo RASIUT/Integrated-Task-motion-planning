@@ -2,7 +2,7 @@
 ## Cognitive Robotics 2024 Final Project - Rahul Mansingh Rout
 
 <p align="center">
-  <img src="https://github.com/RASIUT/Cognitive-Robotics-Project/blob/main/Graphics/Rover.jpg">
+  <img src="https://github.com/RASIUT/Integrated-Task-motion-planning/blob/main/Graphics/Rover.jpg">
 </p>
 
 ## (0) Introduction
@@ -36,7 +36,7 @@ In the first part of the problem, we want to plan the path of the rover between 
 ### Initial Map
 First, the initial map of the environment for the navigation problem is produced. It is shown in the following figure:
 <p align="center">
-  <img src="https://github.com/RASIUT/Cognitive-Robotics-Project/blob/main/Graphics/Initial_Map.png" />
+  <img src="https://github.com/RASIUT/Integrated-Task-motion-planning/blob/main/Graphics/Initial_Map.png" />
 </p>
 
 The rover's start point is represented by the blue point, the goal zones are the green circles, and the obstacles are the dark orange circles. The free space of the rover is colored light orange.
@@ -44,14 +44,14 @@ The rover's start point is represented by the blue point, the goal zones are the
 ### Probabilistic Roadmap (PRM)
 Next, we sample a certain number of points (the default is 200) from the rover's workspace, including one point per goal zone (this becomes the goal node that will be added to the roadmap, and they are represented in dark green). We use a k-Nearest Neighbors (kNN) algorithm (the default k is 5) each sample's nearest neighbors (i.e. create an edge between them) using the kd-tree method, and we can see the results of this in the following animation:
 <p align="center">
-  <img src="https://github.com/RASIUT/Cognitive-Robotics-Project/blob/main/Graphics/kNN_Animation.gif" alt="animated" />
+  <img src="https://github.com/RASIUT/Integrated-Task-motion-planning/blob/main/Graphics/kNN_Animation.gif" alt="animated" />
 </p>
 
 All of the sampled points in the free space are initially shown in black, and the node that is cuurently being assesses for its k-nearest neighbors is highlighted yellow. These neighbors are then highlighted in orange (apologies for the color clashing). Once we have the neighbors identified for every single sample, we connected the samples to their neighbors (these connections are represented using edges) and then run a collision detection algorithm to check whether any of the produced edges collide with any of the obstacles. 
 
 In the following animation, we see the initial sampling process, where the black points represent the sample nodes that were produced (using uniform random sampling), and then the production of valid edges using the kNN and collision detection algorithms:
 <p align="center">
-  <img src="https://github.com/RASIUT/Cognitive-Robotics-Project/blob/main/Graphics/PRM_Animation.gif" alt="animated" />
+  <img src="https://github.com/RASIUT/Integrated-Task-motion-planning/blob/main/Graphics/PRM_Animation.gif" alt="animated" />
 </p>
 
 The yellow points represent nodes which have been connected to their neighbors, and the black lines between the yellow points represent the appropriate edges. The start and goal nodes are highlighted once they are connected to the roadmpa. Once the edge production process is completed, we are left with a graph that should, in most cases (this is a probabilistic process after all), connect the start node to all of the goal nodes and most of the goal nodes to each other, and thus we obtain our Probabilistic Roadmap (PRM) $^{[7]}$.
@@ -59,13 +59,13 @@ The yellow points represent nodes which have been connected to their neighbors, 
 ### Dijkstra's Algorithm
 Once we have our PRM, we would like to find the shortest paths connecting each goal node to the start node, as well as those connecting the goal nodes to each other (when possible). Our PRM is a weighted undirected graph, where the weights are determined by the Euclidean distance between each pair of nodes (i.e. the length of the edge connecting them), and so we can implement Dijkstra's shortest path algorithm $^{[6]}$ to get these shortest paths. The following animation shows the paths obtained by Dijkstra's algorithm, highlighted in yellow:
 <p align="center">
-  <img src="https://github.com/RASIUT/Cognitive-Robotics-Project/blob/main/Graphics/Dijkstra_Animation.gif" alt="animated" />
+  <img src="https://github.com/RASIUT/Integrated-Task-motion-planning/blob/main/Graphics/Dijkstra_Animation.gif" alt="animated" />
 </p>
 
 ### Travelling Salesman Problem
 Next, we simplify the paths obtained by the Dijkstra algorithm into a simple weighted undirected graph, exemplified in the figure below:
 <p align="center">
-  <img src="https://github.com/RASIUT/Cognitive-Robotics-Project/blob/main/Graphics/Simplified_Graph.png" />
+  <img src="https://github.com/RASIUT/Integrated-Task-motion-planning/blob/main/Graphics/Simplified_Graph.png" />
 </p>
 We then treat this graph as a weighted Travelling Salesman Problem (TSP), but one where each goal node in the graph must be visited *at least* once (and not only once, as is usually constrained for TSP's), and we can solve this using classical planning methods by representing the distances between nodes as the action cost for moving between those nodes. Our classical planning representation (which we do in PDDL using the Unified Planning Framework $^{[1]}$ for Python) is conducted as follows:
 
@@ -86,7 +86,7 @@ An example of these `.pddl` files can be found in the `Graphics` folder. Once th
 
 ### Final Trajectory
 <p align="center">
-  <img src="https://github.com/RASIUT/Cognitive-Robotics-Project/blob/main/Graphics/Final_Trajectory_Animation.gif" alt="animated" />
+  <img src="https://github.com/RASIUT/Integrated-Task-motion-planning/blob/main/Graphics/Final_Trajectory_Animation.gif" alt="animated" />
 </p>
 
 ## (2) Arm Motion Planning
@@ -108,13 +108,13 @@ There are many variations on the RRT algorithm, one specifically worth mentionin
 
 ### Search in C-Space 
 <p align="center">
-  <img src="https://github.com/RASIUT/Cognitive-Robotics-Project/blob/main/Graphics/RRT_Animation.gif" alt="animated" width="500" />
-  <img src="https://github.com/RASIUT/Cognitive-Robotics-Project/blob/main/Graphics/RRT_C-Space.png" width="500" />
+  <img src="https://github.com/RASIUT/Integrated-Task-motion-planning/blob/main/Graphics/RRT_Animation.gif" alt="animated" width="500" />
+  <img src="https://github.com/RASIUT/Integrated-Task-motion-planning/blob/main/Graphics/RRT_C-Space.png" width="500" />
 </p>
 
 ### Final Arm Trajectory
 <p align="center">
-  <img src="https://github.com/RASIUT/Cognitive-Robotics-Project/blob/main/Graphics/Arm_Animation.gif" alt="animated" />
+  <img src="https://github.com/RASIUT/Integrated-Task-motion-planning/blob/main/Graphics/Arm_Animation.gif" alt="animated" />
 </p>
 
 ### References
